@@ -1,11 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import mongoose from "mongoose";
-import Movie from "../models/movie";
+import TvShow from "../models/tvshow";
 
-const createMovie = (req: Request, res: Response, next: NextFunction) => {
+const createTV = (req: Request, res: Response, next: NextFunction) => {
   let { title, releaseYear, image, extraInformation } = req.body;
 
-  const movie = new Movie({
+  const tv = new TvShow({
     _id: new mongoose.Types.ObjectId(),
     title,
     releaseYear,
@@ -13,11 +13,28 @@ const createMovie = (req: Request, res: Response, next: NextFunction) => {
     extraInformation,
   });
 
-  return movie
+  return tv
     .save()
     .then((result) => {
       res.status(201).json({
-        movie: result,
+        tv: result,
+      });
+    })
+    .catch((error) => {
+      res.status(500).json({
+        message: error.message,
+        error,
+      });
+    });
+};
+
+const getTV = (req: Request, res: Response, next: NextFunction) => {
+  TvShow.find()
+    .exec()
+    .then((results) => {
+      return res.status(200).json({
+        tvshows: results,
+        count: results.length,
       });
     })
     .catch((error) => {
@@ -28,15 +45,4 @@ const createMovie = (req: Request, res: Response, next: NextFunction) => {
     });
 };
 
-const getMovies = (req: Request, res: Response, next: NextFunction) => {
-  Movie.find()
-    .exec()
-    .then((results) => {
-      return res.status(200).json({ movies: results, count: results.length });
-    })
-    .catch((error) => {
-      return res.status(500).json({ message: error.message, error });
-    });
-};
-
-export default { createMovie, getMovies };
+export default { createTV, getTV };

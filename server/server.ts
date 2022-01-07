@@ -7,6 +7,9 @@ import logging from "./config/logging";
 import config from "./config/config";
 import book from "./routes/book";
 import home from "./routes/home";
+import music from "./routes/music";
+import movie from "./routes/movie";
+import tvshow from "./routes/tvshow";
 
 /** Define namespace **/
 const NAMESPACE = "Server";
@@ -65,6 +68,9 @@ router.use((req, res, next) => {
 /** Routes */
 router.use("/home", home);
 router.use("/book", book);
+router.use("/music", music);
+router.use("/movie", movie);
+router.use("/tvshow", tvshow);
 
 /** Error Handling */
 router.use((req, res, next) => {
